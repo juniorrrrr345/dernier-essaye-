@@ -1,99 +1,81 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// Configuration avec valeurs par défaut pour le déploiement sans variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key';
 
-// Vérification des variables d'environnement
-if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey) {
-  console.warn('⚠️ Variables d\'environnement Supabase manquantes. Certaines fonctionnalités peuvent ne pas fonctionner.');
-}
+// Client pour le côté client (public)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Client pour le côté client (public) - avec fallback
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
-);
-
-// Client pour le côté serveur (admin) - avec fallback
-export const supabaseAdmin = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseServiceRoleKey || 'placeholder-service-key',
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
+// Client pour le côté serveur (admin)
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
   }
-);
+});
 
-// Tables SQL pour l'initialisation
-export const initTables = `
--- Table pour la configuration de la boutique
-CREATE TABLE IF NOT EXISTS shop_config (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  shop_name TEXT NOT NULL DEFAULT 'Ma Boutique CBD',
-  background_color TEXT NOT NULL DEFAULT '#ffffff',
-  background_image_url TEXT,
-  dark_mode BOOLEAN NOT NULL DEFAULT false,
-  footer_text TEXT NOT NULL DEFAULT '© 2024 Ma Boutique CBD. Tous droits réservés.',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+// Données mockées pour le déploiement sans base de données
+export const mockData = {
+  shopConfig: {
+    id: '1',
+    shop_name: 'Ma Boutique CBD',
+    background_color: '#ffffff',
+    background_image_url: null,
+    dark_mode: false,
+    footer_text: '© 2024 Ma Boutique CBD. Tous droits réservés.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  products: [
+    {
+      id: '1',
+      name: 'Huile CBD 10%',
+      description: 'Huile CBD naturelle et bio, 10ml',
+      price: 29.99,
+      video_url: 'https://res.cloudinary.com/demo/video/upload/sample.mp4',
+      thumbnail_url: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
+      order_link: 'https://example.com/commande',
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '2',
+      name: 'Gélules CBD 500mg',
+      description: 'Gélules CBD pour un sommeil réparateur',
+      price: 39.99,
+      video_url: 'https://res.cloudinary.com/demo/video/upload/sample2.mp4',
+      thumbnail_url: 'https://res.cloudinary.com/demo/image/upload/sample2.jpg',
+      order_link: 'https://example.com/commande2',
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ],
+  socialMedia: [
+    {
+      id: '1',
+      platform: 'Instagram',
+      url: 'https://instagram.com/maboutiquecbd',
+      icon: 'instagram',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '2',
+      platform: 'Facebook',
+      url: 'https://facebook.com/maboutiquecbd',
+      icon: 'facebook',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ]
+};
 
--- Table pour les produits
-CREATE TABLE IF NOT EXISTS products (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT NOT NULL,
-  price DECIMAL(10,2) NOT NULL,
-  video_url TEXT NOT NULL,
-  thumbnail_url TEXT NOT NULL,
-  order_link TEXT NOT NULL,
-  is_active BOOLEAN NOT NULL DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Table pour les réseaux sociaux
-CREATE TABLE IF NOT EXISTS social_media (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  platform TEXT NOT NULL,
-  url TEXT NOT NULL,
-  icon TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Table pour le contenu des pages
-CREATE TABLE IF NOT EXISTS page_content (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  page_key TEXT NOT NULL UNIQUE,
-  content JSONB NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Insertion des données par défaut
-INSERT INTO shop_config (shop_name, background_color, dark_mode, footer_text)
-SELECT 'Ma Boutique CBD', '#ffffff', false, '© 2024 Ma Boutique CBD. Tous droits réservés.'
-WHERE NOT EXISTS (SELECT 1 FROM shop_config);
-
--- RLS Policies (Row Level Security)
-ALTER TABLE shop_config ENABLE ROW LEVEL SECURITY;
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-ALTER TABLE social_media ENABLE ROW LEVEL SECURITY;
-ALTER TABLE page_content ENABLE ROW LEVEL SECURITY;
-
--- Policies pour permettre la lecture publique
-CREATE POLICY "Allow public read on shop_config" ON shop_config FOR SELECT USING (true);
-CREATE POLICY "Allow public read on products" ON products FOR SELECT USING (is_active = true);
-CREATE POLICY "Allow public read on social_media" ON social_media FOR SELECT USING (true);
-CREATE POLICY "Allow public read on page_content" ON page_content FOR SELECT USING (true);
-
--- Policies pour permettre toutes les opérations (admin seulement)
-CREATE POLICY "Allow all operations on shop_config" ON shop_config FOR ALL USING (true);
-CREATE POLICY "Allow all operations on products" ON products FOR ALL USING (true);
-CREATE POLICY "Allow all operations on social_media" ON social_media FOR ALL USING (true);
-CREATE POLICY "Allow all operations on page_content" ON page_content FOR ALL USING (true);
-`;
+// Fonction pour détecter si on utilise des données mockées
+export const isUsingMockData = () => {
+  return !process.env.NEXT_PUBLIC_SUPABASE_URL || 
+         process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co';
+};

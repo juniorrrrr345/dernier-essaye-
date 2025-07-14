@@ -2,25 +2,35 @@ import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryUploadResult, UploadResponse } from '@/types';
 
 // Configuration Cloudinary avec fallback
-const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-const apiKey = process.env.CLOUDINARY_API_KEY;
-const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-if (!cloudName || !apiKey || !apiSecret) {
-  console.warn('⚠️ Variables d\'environnement Cloudinary manquantes. L\'upload de fichiers ne fonctionnera pas.');
-}
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'demo';
+const apiKey = process.env.CLOUDINARY_API_KEY || 'demo';
+const apiSecret = process.env.CLOUDINARY_API_SECRET || 'demo';
 
 cloudinary.config({
-  cloud_name: cloudName || 'placeholder',
-  api_key: apiKey || 'placeholder',
-  api_secret: apiSecret || 'placeholder',
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
 });
 
 export { cloudinary };
 
+// Fonction pour détecter si on utilise Cloudinary en mode démo
+export const isUsingDemoCloudinary = () => {
+  return !process.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY === 'demo';
+};
+
 // Upload d'une vidéo avec génération automatique de miniature
 export async function uploadVideo(file: File): Promise<UploadResponse> {
   try {
+    // Si on est en mode démo, retourner une URL de démonstration
+    if (isUsingDemoCloudinary()) {
+      return {
+        success: true,
+        url: 'https://res.cloudinary.com/demo/video/upload/sample.mp4',
+        thumbnail_url: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
+      };
+    }
+
     // Convertir le fichier en buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -72,6 +82,14 @@ export async function uploadVideo(file: File): Promise<UploadResponse> {
 // Upload d'une image pour le fond
 export async function uploadImage(file: File): Promise<UploadResponse> {
   try {
+    // Si on est en mode démo, retourner une URL de démonstration
+    if (isUsingDemoCloudinary()) {
+      return {
+        success: true,
+        url: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
+      };
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -108,6 +126,11 @@ export async function uploadImage(file: File): Promise<UploadResponse> {
 // Supprimer un fichier de Cloudinary
 export async function deleteCloudinaryFile(publicId: string, resourceType: 'image' | 'video' = 'image') {
   try {
+    // Si on est en mode démo, simuler la suppression
+    if (isUsingDemoCloudinary()) {
+      return { result: 'ok' };
+    }
+
     const result = await cloudinary.uploader.destroy(publicId, {
       resource_type: resourceType
     });

@@ -1,35 +1,28 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, mockData, isUsingMockData } from '@/lib/supabase';
 
-// GET /api/config - Récupérer la configuration publique de la boutique
 export async function GET() {
   try {
+    if (isUsingMockData()) {
+      // Utiliser les données mockées
+      return NextResponse.json(mockData.shopConfig);
+    }
+
+    // Utiliser Supabase si configuré
     const { data, error } = await supabase
       .from('shop_config')
       .select('*')
+      .limit(1)
       .single();
 
     if (error) {
-      console.error('Erreur récupération config publique:', error);
-      // Retourner une configuration par défaut si aucune n'est trouvée
-      return NextResponse.json({ 
-        config: {
-          shop_name: 'Ma Boutique CBD',
-          background_color: '#ffffff',
-          background_image_url: null,
-          dark_mode: false,
-          footer_text: '© 2024 Ma Boutique CBD. Tous droits réservés.'
-        }
-      });
+      console.error('Erreur Supabase:', error);
+      return NextResponse.json(mockData.shopConfig);
     }
 
-    return NextResponse.json({ config: data });
-
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Erreur API config publique:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    );
+    console.error('Erreur API config:', error);
+    return NextResponse.json(mockData.shopConfig);
   }
 }

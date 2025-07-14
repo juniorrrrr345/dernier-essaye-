@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, mockData, isUsingMockData } from '@/lib/supabase';
 
-// GET /api/products - Récupérer tous les produits actifs (public)
 export async function GET() {
   try {
+    if (isUsingMockData()) {
+      // Utiliser les données mockées
+      return NextResponse.json(mockData.products);
+    }
+
+    // Utiliser Supabase si configuré
     const { data, error } = await supabase
       .from('products')
       .select('*')
@@ -11,23 +16,13 @@ export async function GET() {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Erreur récupération produits publics:', error);
-      return NextResponse.json(
-        { error: 'Erreur récupération produits' },
-        { status: 500 }
-      );
+      console.error('Erreur Supabase:', error);
+      return NextResponse.json(mockData.products);
     }
 
-    return NextResponse.json({ 
-      products: data || [],
-      count: data?.length || 0
-    });
-
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Erreur API produits publics:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    );
+    console.error('Erreur API products:', error);
+    return NextResponse.json(mockData.products);
   }
 }
