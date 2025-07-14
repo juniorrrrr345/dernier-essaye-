@@ -24,7 +24,8 @@ export default function HomePage() {
       const response = await fetch('/api/products');
       if (response.ok) {
         const data = await response.json();
-        setProducts(data.products.slice(0, 6)); // Afficher seulement les 6 premiers
+        // L'API retourne directement le tableau de produits
+        setProducts(Array.isArray(data) ? data.slice(0, 6) : []);
       }
     } catch (error) {
       console.error('Erreur récupération produits:', error);
