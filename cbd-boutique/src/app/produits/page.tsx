@@ -245,7 +245,7 @@ export default function ProduitsPage() {
               {searchQuery ? (
                 <>
                   {filteredProducts.length} résultat{filteredProducts.length > 1 ? 's' : ''} 
-                                     pour &ldquo;{searchQuery}&rdquo;
+                                     pour &quot;{searchQuery}&quot;
                 </>
               ) : (
                 `${filteredProducts.length} produit${filteredProducts.length > 1 ? 's' : ''} disponible${filteredProducts.length > 1 ? 's' : ''}`
