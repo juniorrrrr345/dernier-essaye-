@@ -270,25 +270,35 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Panel d&apos;Administration
-            </h1>
-            <Link href="/">
-              <Button variant="outline">
-                Retour à la boutique
-              </Button>
-            </Link>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-4 w-full sm:w-auto">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Panel d&apos;Administration
+              </h1>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Link href="/admin/products/new">
+                <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Ajouter un produit
+                </Button>
+              </Link>
+              <Link href="/">
+                <Button variant="outline" className="w-full sm:w-auto">
+                  Voir la boutique
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -315,13 +325,13 @@ export default function AdminDashboard() {
           >
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Configuration</CardTitle>
-                <Settings className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Produits Actifs</CardTitle>
+                <Eye className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">1</div>
+                <div className="text-2xl font-bold">{products.filter(p => p.is_active).length}</div>
                 <p className="text-xs text-muted-foreground">
-                  Boutique configurée
+                  Visibles sur le site
                 </p>
               </CardContent>
             </Card>
@@ -334,13 +344,13 @@ export default function AdminDashboard() {
           >
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Administration</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Configuration</CardTitle>
+                <Settings className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">1</div>
+                <div className="text-2xl font-bold">4</div>
                 <p className="text-xs text-muted-foreground">
-                  Admin connecté
+                  Sections configurables
                 </p>
               </CardContent>
             </Card>
@@ -348,45 +358,45 @@ export default function AdminDashboard() {
         </div>
 
         {/* Configuration rapide */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Configuration de la boutique</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Configuration de la boutique</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link href="/admin/config/shop">
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-4 sm:p-6 text-center">
                   <Palette className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                  <h3 className="font-medium">Apparence</h3>
-                  <p className="text-sm text-gray-600">Logo, couleurs, thème</p>
+                  <h3 className="font-medium text-sm sm:text-base">Apparence</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Logo, couleurs, thème</p>
                 </CardContent>
               </Card>
             </Link>
 
             <Link href="/admin/config/content">
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-4 sm:p-6 text-center">
                   <Edit className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <h3 className="font-medium">Contenu</h3>
-                  <p className="text-sm text-gray-600">Textes, pages</p>
+                  <h3 className="font-medium text-sm sm:text-base">Contenu</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Textes, pages</p>
                 </CardContent>
               </Card>
             </Link>
 
             <Link href="/admin/config/social">
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-4 sm:p-6 text-center">
                   <Share2 className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <h3 className="font-medium">Réseaux sociaux</h3>
-                  <p className="text-sm text-gray-600">Liens sociaux</p>
+                  <h3 className="font-medium text-sm sm:text-base">Réseaux sociaux</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Liens sociaux</p>
                 </CardContent>
               </Card>
             </Link>
 
             <Link href="/admin/config/general">
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-4 sm:p-6 text-center">
                   <Settings className="h-8 w-8 text-gray-600 mx-auto mb-2" />
-                  <h3 className="font-medium">Général</h3>
-                  <p className="text-sm text-gray-600">Paramètres généraux</p>
+                  <h3 className="font-medium text-sm sm:text-base">Général</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Paramètres généraux</p>
                 </CardContent>
               </Card>
             </Link>
@@ -394,13 +404,13 @@ export default function AdminDashboard() {
         </div>
 
         {/* Products Section */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Gestion des Produits
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+              Gestion des Produits ({products.length})
             </h2>
             <Link href="/admin/products/new">
-              <Button>
+              <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
                 <Plus className="h-4 w-4 mr-2" />
                 Ajouter un produit
               </Button>
@@ -408,7 +418,7 @@ export default function AdminDashboard() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {[...Array(6)].map((_, i) => (
                 <Card key={i} className="animate-pulse">
                   <CardHeader>
@@ -422,7 +432,7 @@ export default function AdminDashboard() {
               ))}
             </div>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {products.map((product) => (
                 <motion.div
                   key={product.id}
@@ -433,65 +443,75 @@ export default function AdminDashboard() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex justify-between items-start">
-                        <span className="text-lg">{product.name}</span>
-                        <div className="flex space-x-2">
+                        <span className="text-base sm:text-lg truncate">{product.name}</span>
+                        <div className="flex space-x-1">
                           <Button 
                             size="sm" 
                             variant="outline"
                             onClick={() => setViewingProduct(product)}
-                            title="Voir la vidéo"
+                            className="p-1"
                           >
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-3 w-3" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
                             onClick={() => setEditingProduct(product)}
-                            title="Modifier"
+                            className="p-1"
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className="h-3 w-3" />
                           </Button>
                           <Button 
                             size="sm" 
-                            variant="outline" 
-                            className="text-red-600"
+                            variant="outline"
                             onClick={() => setDeletingProduct(product)}
-                            title="Supprimer"
+                            className="p-1 text-red-600 hover:text-red-700"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <img 
-                        src={product.thumbnail_url} 
-                        alt={product.name}
-                        className="w-full h-32 object-cover rounded-md mb-3"
-                      />
-                      <p className="text-sm text-gray-600 mb-2">
-                        {product.description}
-                      </p>
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="font-semibold text-green-600">
-                          {product.price}€
-                        </span>
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          product.is_active 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {product.is_active ? 'Actif' : 'Inactif'}
-                        </span>
+                    <CardContent className="space-y-3">
+                      {product.thumbnail_url && (
+                        <div className="relative aspect-video overflow-hidden rounded-md">
+                          <img
+                            src={product.thumbnail_url}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {product.description}
+                        </p>
+                        
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-green-600">
+                            {product.price}€
+                          </span>
+                          <span className={`text-xs px-2 py-1 rounded ${
+                            product.is_active 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {product.is_active ? 'Actif' : 'Inactif'}
+                          </span>
+                        </div>
+
+                        {product.order_link && (
+                          <Button 
+                            size="sm" 
+                            className="w-full"
+                            onClick={() => window.open(product.order_link, '_blank', 'noopener noreferrer')}
+                          >
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Voir le lien de commande
+                          </Button>
+                        )}
                       </div>
-                      <Button 
-                        size="sm" 
-                        className="w-full"
-                        onClick={() => window.open(product.order_link, '_blank', 'noopener noreferrer')}
-                      >
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Voir le lien de commande
-                      </Button>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -502,17 +522,17 @@ export default function AdminDashboard() {
               className="text-center py-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.8 }}
             >
-              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Aucun produit
               </h3>
               <p className="text-gray-600 mb-6">
                 Commencez par ajouter votre premier produit.
               </p>
               <Link href="/admin/products/new">
-                <Button>
+                <Button className="bg-green-600 hover:bg-green-700">
                   <Plus className="h-4 w-4 mr-2" />
                   Ajouter un produit
                 </Button>
