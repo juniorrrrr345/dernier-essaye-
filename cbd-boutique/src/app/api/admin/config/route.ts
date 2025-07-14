@@ -53,6 +53,7 @@ export async function PUT(request: NextRequest) {
       shop_name, 
       background_color, 
       background_image_url, 
+      logo_url,
       dark_mode, 
       footer_text 
     } = configData;
@@ -81,6 +82,7 @@ export async function PUT(request: NextRequest) {
           shop_name,
           background_color,
           background_image_url: background_image_url || null,
+          logo_url: logo_url || null,
           dark_mode: dark_mode || false,
           footer_text,
           updated_at: new Date().toISOString()
@@ -98,6 +100,7 @@ export async function PUT(request: NextRequest) {
           shop_name,
           background_color,
           background_image_url: background_image_url || null,
+          logo_url: logo_url || null,
           dark_mode: dark_mode || false,
           footer_text
         })
