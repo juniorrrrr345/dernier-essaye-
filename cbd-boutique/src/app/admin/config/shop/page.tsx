@@ -224,7 +224,7 @@ export default function ShopConfigPage() {
                         id="logo-upload"
                       />
                       <label htmlFor="logo-upload">
-                        <Button variant="outline" asChild>
+                        <Button variant="outline">
                           <span className="cursor-pointer">
                             <Upload className="h-4 w-4 mr-2" />
                             Choisir un logo

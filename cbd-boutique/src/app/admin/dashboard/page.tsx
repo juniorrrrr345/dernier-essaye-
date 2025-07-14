@@ -177,7 +177,7 @@ const ProductDeleteModal = ({ product, isOpen, onClose, onDelete }: {
             <Button variant="outline" onClick={onClose}>
               Annuler
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="outline" onClick={handleDelete}>
               Supprimer
             </Button>
           </div>
@@ -220,11 +220,12 @@ const ProductVideoModal = ({ product, isOpen, onClose }: {
               <p className="text-gray-600">{product.description}</p>
               <p className="text-2xl font-bold text-green-600 mt-2">{product.price}€</p>
             </div>
-            <Button asChild>
-              <a href={product.order_link} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Commander
-              </a>
+            <Button 
+              variant="outline"
+              onClick={() => window.open(product.order_link, '_blank', 'noopener noreferrer')}
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Commander
             </Button>
           </div>
         </div>
@@ -486,12 +487,10 @@ export default function AdminDashboard() {
                       <Button 
                         size="sm" 
                         className="w-full"
-                        asChild
+                        onClick={() => window.open(product.order_link, '_blank', 'noopener noreferrer')}
                       >
-                        <a href={product.order_link} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Voir le lien de commande
-                        </a>
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Voir le lien de commande
                       </Button>
                     </CardContent>
                   </Card>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Product } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { Save, ArrowLeft, Upload, Play, ExternalLink, Image } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ProductFormPage() {
+function ProductFormPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productId = searchParams.get('id');
@@ -340,7 +340,7 @@ export default function ProductFormPage() {
                         id="thumbnail-upload"
                       />
                       <label htmlFor="thumbnail-upload">
-                        <Button variant="outline" asChild>
+                        <Button variant="outline">
                           <span className="cursor-pointer">
                             <Image className="h-4 w-4 mr-2" />
                             Choisir une image
@@ -384,7 +384,7 @@ export default function ProductFormPage() {
                           id="video-upload"
                         />
                         <label htmlFor="video-upload">
-                          <Button variant="outline" asChild>
+                          <Button variant="outline">
                             <span className="cursor-pointer">
                               <Upload className="h-4 w-4 mr-2" />
                               Choisir une vidéo
@@ -488,5 +488,13 @@ export default function ProductFormPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ProductFormPage() {
+  return (
+    <Suspense>
+      <ProductFormPageInner />
+    </Suspense>
   );
 }
