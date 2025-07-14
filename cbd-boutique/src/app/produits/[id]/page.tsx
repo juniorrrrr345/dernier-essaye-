@@ -30,12 +30,19 @@ export default function ProductDetailPage() {
         const data = await response.json();
         // L'API retourne directement le produit
         setProduct(data);
-      } else {
+      } else if (response.status === 404) {
+        // Produit non trouvé - rediriger vers la liste
         router.push('/produits');
+        return;
+      } else {
+        console.error('Erreur API:', response.status);
+        router.push('/produits');
+        return;
       }
     } catch (error) {
       console.error('Erreur récupération produit:', error);
       router.push('/produits');
+      return;
     } finally {
       setLoading(false);
     }

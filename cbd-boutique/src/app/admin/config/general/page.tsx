@@ -85,19 +85,19 @@ export default function GeneralConfigPage() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-4 w-full sm:w-auto">
               <Link href="/admin/dashboard">
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour
+                  <span className="hidden sm:inline">Retour</span>
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Configuration générale
               </h1>
             </div>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
               <Save className="h-4 w-4 mr-2" />
               {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </Button>
@@ -106,10 +106,10 @@ export default function GeneralConfigPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {/* Paramètres généraux */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -117,34 +117,34 @@ export default function GeneralConfigPage() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
                     <Settings className="h-5 w-5 mr-2" />
                     Paramètres de base
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="block text-sm font-medium mb-2">
                       Email de contact
                     </label>
                     <input
                       type="email"
                       value={settings.contact_email}
                       onChange={(e) => setSettings({...settings, contact_email: e.target.value})}
-                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
                       placeholder="contact@maboutiquecbd.fr"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1">
+                      <label className="block text-sm font-medium mb-2">
                         Fuseau horaire
                       </label>
                       <select
                         value={settings.timezone}
                         onChange={(e) => setSettings({...settings, timezone: e.target.value})}
-                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
                       >
                         <option value="Europe/Paris">Europe/Paris</option>
                         <option value="Europe/London">Europe/London</option>
@@ -154,13 +154,13 @@ export default function GeneralConfigPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1">
+                      <label className="block text-sm font-medium mb-2">
                         Devise
                       </label>
                       <select
                         value={settings.currency}
                         onChange={(e) => setSettings({...settings, currency: e.target.value})}
-                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
                       >
                         <option value="EUR">EUR (€)</option>
                         <option value="USD">USD ($)</option>
@@ -170,13 +170,13 @@ export default function GeneralConfigPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="block text-sm font-medium mb-2">
                       Langue par défaut
                     </label>
                     <select
                       value={settings.default_language}
                       onChange={(e) => setSettings({...settings, default_language: e.target.value})}
-                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
                     >
                       <option value="fr">Français</option>
                       <option value="en">English</option>
@@ -185,13 +185,13 @@ export default function GeneralConfigPage() {
                     </select>
                   </div>
 
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-md">
                     <input
                       type="checkbox"
                       id="maintenance_mode"
                       checked={settings.maintenance_mode}
                       onChange={(e) => setSettings({...settings, maintenance_mode: e.target.checked})}
-                      className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                      className="h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                     />
                     <label htmlFor="maintenance_mode" className="text-sm font-medium">
                       Mode maintenance

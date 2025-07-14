@@ -121,19 +121,19 @@ export default function ShopConfigPage() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-4 w-full sm:w-auto">
               <Link href="/admin/dashboard">
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour
+                  <span className="hidden sm:inline">Retour</span>
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Configuration de l&apos;apparence
               </h1>
             </div>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
               <Save className="h-4 w-4 mr-2" />
               {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </Button>
@@ -142,10 +142,10 @@ export default function ShopConfigPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {/* Configuration */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Informations générales */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -154,33 +154,33 @@ export default function ShopConfigPage() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
                     <Type className="h-5 w-5 mr-2" />
                     Informations générales
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="block text-sm font-medium mb-2">
                       Nom de la boutique
                     </label>
                     <input
                       type="text"
                       value={config.shop_name || ''}
                       onChange={(e) => setConfig({...config, shop_name: e.target.value})}
-                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
                       placeholder="Ma Boutique CBD"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="block text-sm font-medium mb-2">
                       Texte du pied de page
                     </label>
                     <textarea
                       value={config.footer_text || ''}
                       onChange={(e) => setConfig({...config, footer_text: e.target.value})}
-                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent h-24"
+                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent h-24 text-base"
                       placeholder="© 2024 Ma Boutique CBD. Tous droits réservés."
                     />
                   </div>
@@ -196,7 +196,7 @@ export default function ShopConfigPage() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
                     <Image className="h-5 w-5 mr-2" />
                     Logo de la boutique
                   </CardTitle>
