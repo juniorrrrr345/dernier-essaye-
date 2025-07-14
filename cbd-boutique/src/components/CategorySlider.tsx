@@ -121,7 +121,7 @@ export default function CategorySlider() {
                     <div className="absolute inset-0">
                       <img
                         src={categories[currentIndex].image_url}
-                        alt={categories[currentIndex].name}
+                        alt={`Image de la catégorie ${categories[currentIndex].name}`}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black/40"></div>

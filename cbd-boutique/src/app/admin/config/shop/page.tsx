@@ -215,7 +215,7 @@ export default function ShopConfigPage() {
                       <div className="mb-4">
                         <img
                           src={logoPreview || config.logo_url}
-                          alt="Logo"
+                          alt="Logo de la boutique"
                           className="h-20 w-auto object-contain border rounded-md p-2"
                         />
                       </div>
@@ -339,7 +339,7 @@ export default function ShopConfigPage() {
                         {(logoPreview || config.logo_url) ? (
                           <img
                             src={logoPreview || config.logo_url}
-                            alt="Logo"
+                            alt="Logo de la boutique"
                             className="h-8 w-auto"
                           />
                         ) : (

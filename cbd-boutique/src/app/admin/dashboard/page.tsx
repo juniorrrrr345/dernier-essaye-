@@ -5,7 +5,7 @@ import { Product } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Plus, Edit, Trash2, Settings, Users, Package, Eye, ExternalLink, Share2, Palette, Tag } from 'lucide-react';
+import { Plus, Edit, Trash2, Settings, Package, Eye, ExternalLink, Share2, Palette, Tag } from 'lucide-react';
 import Link from 'next/link';
 
 // Modal pour l'édition des produits
@@ -487,7 +487,7 @@ export default function AdminDashboard() {
                         <div className="relative aspect-video overflow-hidden rounded-md">
                           <img
                             src={product.thumbnail_url}
-                            alt={product.name}
+                            alt={`Miniature de ${product.name}`}
                             className="w-full h-full object-cover"
                           />
                         </div>

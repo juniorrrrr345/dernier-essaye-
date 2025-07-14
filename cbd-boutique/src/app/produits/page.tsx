@@ -25,8 +25,11 @@ export default function ProduitsPage() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    const loadData = async () => {
+      await fetchProducts();
+      await fetchCategories();
+    };
+    loadData();
   }, []);
 
   useEffect(() => {

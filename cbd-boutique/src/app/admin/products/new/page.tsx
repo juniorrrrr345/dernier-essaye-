@@ -318,7 +318,7 @@ function ProductFormPageInner() {
                       <div className="mb-4">
                         <img
                           src={product.thumbnail_url}
-                          alt="Aperçu"
+                          alt="Aperçu de l'image miniature"
                           className="w-full h-48 object-cover rounded-md border"
                         />
                       </div>
@@ -413,7 +413,7 @@ function ProductFormPageInner() {
                       {product.thumbnail_url ? (
                         <img
                           src={product.thumbnail_url}
-                          alt={product.name || 'Produit'}
+                          alt={product.name || 'Aperçu du produit'}
                           className="w-full h-48 object-cover rounded-md mb-3"
                         />
                       ) : (

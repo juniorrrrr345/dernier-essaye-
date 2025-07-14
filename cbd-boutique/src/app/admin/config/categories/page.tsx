@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Save, ArrowLeft, Plus, Edit, Trash2, Tag, Image, X } from 'lucide-react';
+import { Save, ArrowLeft, Plus, Edit, Trash2, Tag, X } from 'lucide-react';
 import Link from 'next/link';
 
 interface Category {
@@ -194,11 +194,11 @@ export default function CategoriesConfigPage() {
                           <div className="flex items-start justify-between">
                             <div className="flex items-center space-x-4 flex-1">
                               {category.image_url && (
-                                <img 
-                                  src={category.image_url} 
-                                  alt={category.name}
-                                  className="w-16 h-16 object-cover rounded-lg"
-                                />
+                                                                 <img 
+                                   src={category.image_url} 
+                                   alt={`Image de ${category.name}`}
+                                   className="w-16 h-16 object-cover rounded-lg"
+                                 />
                               )}
                               <div className="flex-1">
                                 <h3 className="font-semibold text-lg">{category.name}</h3>
@@ -291,11 +291,11 @@ export default function CategoriesConfigPage() {
                     </label>
                     <div className="space-y-2">
                       {formData.image_url && (
-                        <img 
-                          src={formData.image_url} 
-                          alt="Aperçu"
-                          className="w-full h-32 object-cover rounded-lg"
-                        />
+                                                 <img 
+                           src={formData.image_url} 
+                           alt="Aperçu de l'image de catégorie"
+                           className="w-full h-32 object-cover rounded-lg"
+                         />
                       )}
                       <input
                         type="file"

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin, mockData, isUsingMockData } from '@/lib/supabase';
+import { supabaseAdmin, isUsingMockData } from '@/lib/supabase';
 
 // GET /api/admin/content - Récupérer tout le contenu
 export async function GET() {
