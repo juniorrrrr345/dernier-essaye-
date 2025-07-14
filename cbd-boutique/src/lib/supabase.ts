@@ -1,19 +1,31 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Client pour le côté client (public)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Vérification des variables d'environnement
+if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey) {
+  console.warn('⚠️ Variables d\'environnement Supabase manquantes. Certaines fonctionnalités peuvent ne pas fonctionner.');
+}
 
-// Client pour le côté serveur (admin)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
+// Client pour le côté client (public) - avec fallback
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder-key'
+);
+
+// Client pour le côté serveur (admin) - avec fallback
+export const supabaseAdmin = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseServiceRoleKey || 'placeholder-service-key',
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
   }
-});
+);
 
 // Tables SQL pour l'initialisation
 export const initTables = `
