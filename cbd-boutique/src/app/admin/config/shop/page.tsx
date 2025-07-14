@@ -119,7 +119,7 @@ export default function ShopConfigPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4 w-full sm:w-auto">
@@ -133,9 +133,14 @@ export default function ShopConfigPage() {
                 Configuration de l&apos;apparence
               </h1>
             </div>
-            <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
-              <Save className="h-4 w-4 mr-2" />
-              {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+            <Button 
+              onClick={handleSave} 
+              disabled={saving}
+              className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3"
+              size="lg"
+            >
+              <Save className="h-5 w-5 mr-2" />
+              {saving ? 'Sauvegarde...' : 'Sauvegarder les changements'}
             </Button>
           </div>
         </div>

@@ -6,7 +6,7 @@ import { Product } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Save, ArrowLeft, Upload, Play, ExternalLink, Image } from 'lucide-react';
+import { Save, ArrowLeft, Upload, Play, ExternalLink, Image, Package } from 'lucide-react';
 import Link from 'next/link';
 
 function ProductFormPageInner() {
@@ -175,33 +175,39 @@ function ProductFormPageInner() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-4 w-full sm:w-auto">
               <Link href="/admin/dashboard">
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour
+                  <span className="hidden sm:inline">Retour</span>
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 {isEditing ? 'Modifier le produit' : 'Ajouter un produit'}
               </h1>
             </div>
-            <Button onClick={handleSave} disabled={saving}>
-              <Save className="h-4 w-4 mr-2" />
-              {saving ? 'Sauvegarde...' : (isEditing ? 'Mettre à jour' : 'Créer')}
+            <Button 
+              onClick={handleSave} 
+              disabled={saving}
+              className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3"
+              size="lg"
+            >
+              <Save className="h-5 w-5 mr-2" />
+              {saving ? 'Sauvegarde...' : 'Sauvegarder le produit'}
             </Button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {/* Formulaire */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
+            {/* Informations de base */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -209,94 +215,77 @@ function ProductFormPageInner() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Informations du produit</CardTitle>
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
+                    <Package className="h-5 w-5 mr-2" />
+                    Informations de base
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="block text-sm font-medium mb-2">
                       Nom du produit *
                     </label>
                     <input
                       type="text"
                       value={product.name || ''}
                       onChange={(e) => setProduct({ ...product, name: e.target.value })}
-                      className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        errors.name ? 'border-red-500' : ''
-                      }`}
-                      placeholder="Huile CBD 10%"
+                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
+                      placeholder="Nom du produit"
                     />
                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="block text-sm font-medium mb-2">
                       Description *
                     </label>
                     <textarea
                       value={product.description || ''}
                       onChange={(e) => setProduct({ ...product, description: e.target.value })}
-                      className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent h-32 ${
-                        errors.description ? 'border-red-500' : ''
-                      }`}
+                      className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent h-24 text-base"
                       placeholder="Description détaillée du produit..."
                     />
                     {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Prix (€) *
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      value={product.price || ''}
-                      onChange={(e) => setProduct({ ...product, price: parseFloat(e.target.value) || 0 })}
-                      className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        errors.price ? 'border-red-500' : ''
-                      }`}
-                      placeholder="29.99"
-                    />
-                    {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Prix (€) *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={product.price || ''}
+                        onChange={(e) => setProduct({ ...product, price: parseFloat(e.target.value) || 0 })}
+                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
+                        placeholder="29.99"
+                      />
+                      {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Lien de commande *
+                      </label>
+                      <input
+                        type="url"
+                        value={product.order_link || ''}
+                        onChange={(e) => setProduct({ ...product, order_link: e.target.value })}
+                        className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
+                        placeholder="https://exemple.com/commander"
+                      />
+                      {errors.order_link && <p className="text-red-500 text-xs mt-1">{errors.order_link}</p>}
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Lien de commande *
-                    </label>
-                    <input
-                      type="url"
-                      value={product.order_link || ''}
-                      onChange={(e) => setProduct({ ...product, order_link: e.target.value })}
-                      className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        errors.order_link ? 'border-red-500' : ''
-                      }`}
-                      placeholder="https://exemple.com/commande"
-                    />
-                    {errors.order_link && <p className="text-red-500 text-xs mt-1">{errors.order_link}</p>}
-                    {product.order_link && (
-                      <div className="mt-2">
-                        <a
-                          href={product.order_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-green-600 text-sm hover:underline flex items-center"
-                        >
-                          <ExternalLink className="h-3 w-3 mr-1" />
-                          Tester le lien
-                        </a>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-md">
                     <input
                       type="checkbox"
                       id="is_active"
-                      checked={product.is_active || false}
+                      checked={product.is_active}
                       onChange={(e) => setProduct({ ...product, is_active: e.target.checked })}
-                      className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                      className="h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                     />
                     <label htmlFor="is_active" className="text-sm font-medium">
                       Produit actif (visible sur le site)
@@ -314,7 +303,10 @@ function ProductFormPageInner() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Médias</CardTitle>
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
+                    <Image className="h-5 w-5 mr-2" />
+                    Médias
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Image miniature */}
@@ -331,20 +323,19 @@ function ProductFormPageInner() {
                         />
                       </div>
                     )}
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleThumbnailChange}
                         className="hidden"
                         id="thumbnail-upload"
+                        capture="environment"
                       />
                       <label htmlFor="thumbnail-upload">
-                        <Button variant="outline">
-                          <span className="cursor-pointer">
-                            <Image className="h-4 w-4 mr-2" />
-                            Choisir une image
-                          </span>
+                        <Button variant="outline" className="w-full sm:w-auto">
+                          <Image className="h-4 w-4 mr-2" />
+                          Choisir une image
                         </Button>
                       </label>
                       {thumbnailFile && (
@@ -370,25 +361,24 @@ function ProductFormPageInner() {
                           type="url"
                           value={product.video_url || ''}
                           onChange={(e) => setProduct({ ...product, video_url: e.target.value })}
-                          className="w-full p-2 border rounded-md text-sm"
+                          className="w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-base"
                           placeholder="https://exemple.com/video.mp4"
                         />
                       </div>
                       <div className="text-center text-gray-500 text-sm">ou</div>
-                      <div className="flex items-center space-x-4">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                         <input
                           type="file"
                           accept="video/*"
                           onChange={handleVideoChange}
                           className="hidden"
                           id="video-upload"
+                          capture="environment"
                         />
                         <label htmlFor="video-upload">
-                          <Button variant="outline">
-                            <span className="cursor-pointer">
-                              <Upload className="h-4 w-4 mr-2" />
-                              Choisir une vidéo
-                            </span>
+                          <Button variant="outline" className="w-full sm:w-auto">
+                            <Upload className="h-4 w-4 mr-2" />
+                            Choisir une vidéo
                           </Button>
                         </label>
                         {videoFile && (

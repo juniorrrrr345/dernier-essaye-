@@ -1,22 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { uploadVideo, uploadImage } from '@/lib/cloudinary';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+import { existsSync } from 'fs';
 
-// POST /api/admin/upload - Upload d'un fichier (vidéo ou image)
+// Fonction pour créer un dossier s'il n'existe pas
+async function ensureDirectoryExists(dirPath: string) {
+  if (!existsSync(dirPath)) {
+    await mkdir(dirPath, { recursive: true });
+  }
+}
+
+// Fonction pour générer un nom de fichier unique
+function generateUniqueFileName(originalName: string): string {
+  const timestamp = Date.now();
+  const randomString = Math.random().toString(36).substring(2, 15);
+  const extension = originalName.split('.').pop();
+  return `${timestamp}-${randomString}.${extension}`;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    // Vérifier l'authentification
-    const auth = requireAuth(request);
-    if (!auth) {
-      return NextResponse.json(
-        { error: 'Non autorisé' },
-        { status: 401 }
-      );
-    }
-
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const type = formData.get('type') as string; // 'video' ou 'image'
+    const type = formData.get('type') as string;
 
     if (!file) {
       return NextResponse.json(
@@ -25,57 +31,66 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!type || !['video', 'image'].includes(type)) {
-      return NextResponse.json(
-        { error: 'Type de fichier invalide. Utilisez "video" ou "image"' },
-        { status: 400 }
-      );
-    }
-
-    // Validation de la taille du fichier (max 100MB pour vidéo, 10MB pour image)
-    const maxSize = type === 'video' ? 100 * 1024 * 1024 : 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-      return NextResponse.json(
-        { error: `Fichier trop volumineux. Taille max: ${type === 'video' ? '100MB' : '10MB'}` },
-        { status: 400 }
-      );
-    }
-
-    // Validation du type MIME
-    const allowedTypes = type === 'video' 
-      ? ['video/mp4', 'video/mpeg', 'video/quicktime', 'video/webm']
-      : ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    // Vérifier le type de fichier
+    const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
+    const allowedTypes = [...allowedImageTypes, ...allowedVideoTypes];
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: `Type de fichier non supporté: ${file.type}` },
+        { error: 'Type de fichier non supporté' },
         { status: 400 }
       );
     }
 
-    // Upload vers Cloudinary
-    const result = type === 'video' 
-      ? await uploadVideo(file)
-      : await uploadImage(file);
-
-    if (!result.success) {
+    // Vérifier la taille du fichier (max 50MB)
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    if (file.size > maxSize) {
       return NextResponse.json(
-        { error: result.error || 'Erreur upload' },
-        { status: 500 }
+        { error: 'Fichier trop volumineux (max 50MB)' },
+        { status: 400 }
       );
+    }
+
+    // Créer le dossier d'upload s'il n'existe pas
+    const uploadDir = join(process.cwd(), 'public', 'uploads');
+    await ensureDirectoryExists(uploadDir);
+
+    // Créer des sous-dossiers par type
+    const typeDir = join(uploadDir, type);
+    await ensureDirectoryExists(typeDir);
+
+    // Générer un nom de fichier unique
+    const fileName = generateUniqueFileName(file.name);
+    const filePath = join(typeDir, fileName);
+
+    // Convertir le fichier en buffer et l'écrire
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    await writeFile(filePath, buffer);
+
+    // Générer l'URL publique
+    const publicUrl = `/uploads/${type}/${fileName}`;
+
+    // Pour les images, générer aussi une URL de miniature
+    let thumbnailUrl = '';
+    if (allowedImageTypes.includes(file.type)) {
+      thumbnailUrl = publicUrl; // Pour l'instant, utiliser la même image
     }
 
     return NextResponse.json({
       success: true,
-      url: result.url,
-      thumbnail_url: result.thumbnail_url,
-      message: `${type === 'video' ? 'Vidéo' : 'Image'} uploadée avec succès`
+      url: publicUrl,
+      thumbnail_url: thumbnailUrl,
+      filename: fileName,
+      size: file.size,
+      type: file.type
     });
 
   } catch (error) {
     console.error('Erreur upload:', error);
     return NextResponse.json(
-      { error: 'Erreur serveur lors de l\'upload' },
+      { error: 'Erreur lors de l\'upload' },
       { status: 500 }
     );
   }
