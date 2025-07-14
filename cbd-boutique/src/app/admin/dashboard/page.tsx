@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Product, ShopConfig, SocialMedia } from '@/types';
+import { Product } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Plus, Edit, Trash2, Settings, Users, Package, Eye, ExternalLink, Image, Palette, Globe, Share2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Settings, Users, Package, Eye, ExternalLink, Palette, Share2 } from 'lucide-react';
 import Link from 'next/link';
 
 // Modal pour l'édition des produits
@@ -170,7 +170,7 @@ const ProductDeleteModal = ({ product, isOpen, onClose, onDelete }: {
         <div className="p-6">
           <h3 className="text-lg font-semibold mb-4">Supprimer le produit</h3>
           <p className="text-gray-600 mb-6">
-            Êtes-vous sûr de vouloir supprimer le produit "{product?.name}" ? Cette action est irréversible.
+            Êtes-vous sûr de vouloir supprimer le produit &quot;{product?.name}&quot; ? Cette action est irréversible.
           </p>
           
           <div className="flex justify-end space-x-3">

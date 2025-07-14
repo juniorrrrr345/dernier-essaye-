@@ -70,10 +70,10 @@ const PageEditModal = ({ page, isOpen, onClose, onSave }: {
   useEffect(() => {
     if (page) {
       setFormData({
-        title: (page.content as any)?.title || '',
-        content: (page.content as any)?.content || '',
-        slug: (page.content as any)?.slug || '',
-        published: (page.content as any)?.published || true
+        title: (page.content as Record<string, unknown>)?.title as string || '',
+        content: (page.content as Record<string, unknown>)?.content as string || '',
+        slug: (page.content as Record<string, unknown>)?.slug as string || '',
+        published: (page.content as Record<string, unknown>)?.published as boolean || true
       });
     } else {
       setFormData({
@@ -204,8 +204,8 @@ export default function ContentConfigPage() {
         const data = await response.json();
         // Fusionner avec le contenu par défaut
         const mergedContent = DEFAULT_CONTENT.map(defaultItem => {
-          const savedItem = data.find((item: any) => item.page_key === defaultItem.key);
-          return savedItem ? { ...defaultItem, value: savedItem.content.value } : defaultItem;
+                  const savedItem = data.find((item: Record<string, unknown>) => item.page_key === defaultItem.key);
+        return savedItem ? { ...defaultItem, value: ((savedItem.content as Record<string, unknown>)?.value as string) || '' } : defaultItem;
         });
         setContent(mergedContent);
       }
