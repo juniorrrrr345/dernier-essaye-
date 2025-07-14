@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
@@ -36,9 +36,9 @@ export default function GeneralConfigPage() {
 
   useEffect(() => {
     fetchSettings();
-  }, []);
+  }, [fetchSettings]);
 
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/settings');
       if (response.ok) {
@@ -50,7 +50,7 @@ export default function GeneralConfigPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [settings]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -303,7 +303,7 @@ export default function GeneralConfigPage() {
                       placeholder="<!-- Collez ici votre code Google Analytics -->"
                     />
                     <p className="text-xs text-gray-600 mt-1">
-                      Code de tracking Google Analytics ou autre service d'analyse
+                      Code de tracking Google Analytics ou autre service d&apos;analyse
                     </p>
                   </div>
                 </CardContent>

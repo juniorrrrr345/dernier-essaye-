@@ -344,22 +344,22 @@ export default function SocialConfigPage() {
             {/* Guide d'aide */}
             <Card>
               <CardHeader>
-                <CardTitle>Guide d'utilisation</CardTitle>
+                <CardTitle>Guide d&apos;utilisation</CardTitle>
               </CardHeader>
               <CardContent className="prose prose-sm">
                 <div className="space-y-3 text-sm">
                   <div>
                     <h4 className="font-medium">Comment ajouter un réseau social :</h4>
                     <ol className="list-decimal list-inside space-y-1 text-gray-600">
-                      <li>Cliquez sur "Ajouter un réseau social"</li>
+                      <li>Cliquez sur &quot;Ajouter un réseau social&quot;</li>
                       <li>Sélectionnez la plateforme dans la liste</li>
-                      <li>Entrez l'URL complète de votre profil</li>
-                      <li>Cliquez sur "Ajouter"</li>
+                      <li>Entrez l&apos;URL complète de votre profil</li>
+                      <li>Cliquez sur &quot;Ajouter&quot;</li>
                     </ol>
                   </div>
                   
                   <div>
-                    <h4 className="font-medium">Exemples d'URLs :</h4>
+                    <h4 className="font-medium">Exemples d&apos;URLs :</h4>
                     <ul className="list-disc list-inside space-y-1 text-gray-600">
                       <li><strong>Facebook :</strong> https://facebook.com/votrepage</li>
                       <li><strong>Instagram :</strong> https://instagram.com/votrecompte</li>

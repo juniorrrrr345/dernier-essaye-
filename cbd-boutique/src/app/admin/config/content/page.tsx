@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PageContent } from '@/types';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
@@ -14,6 +14,21 @@ interface ContentSection {
   description: string;
   value: string;
   type: 'text' | 'textarea' | 'rich';
+}
+
+interface PageContentData {
+  title: string;
+  content: string;
+  slug: string;
+  published: boolean;
+}
+
+interface PageContent {
+  id: string;
+  page_key: string;
+  content: PageContentData;
+  created_at: string;
+  updated_at: string;
 }
 
 const DEFAULT_CONTENT: ContentSection[] = [
@@ -70,10 +85,10 @@ const PageEditModal = ({ page, isOpen, onClose, onSave }: {
   useEffect(() => {
     if (page) {
       setFormData({
-        title: (page.content as any)?.title || '',
-        content: (page.content as any)?.content || '',
-        slug: (page.content as any)?.slug || '',
-        published: (page.content as any)?.published || true
+        title: (page.content as PageContentData)?.title || '',
+        content: (page.content as PageContentData)?.content || '',
+        slug: (page.content as PageContentData)?.slug || '',
+        published: (page.content as PageContentData)?.published || true
       });
     } else {
       setFormData({
@@ -204,7 +219,7 @@ export default function ContentConfigPage() {
         const data = await response.json();
         // Fusionner avec le contenu par défaut
         const mergedContent = DEFAULT_CONTENT.map(defaultItem => {
-          const savedItem = data.find((item: any) => item.page_key === defaultItem.key);
+          const savedItem = data.find((item: { page_key: string; content: { value: string } }) => item.page_key === defaultItem.key);
           return savedItem ? { ...defaultItem, value: savedItem.content.value } : defaultItem;
         });
         setContent(mergedContent);
@@ -389,10 +404,10 @@ export default function ContentConfigPage() {
                           <FileText className="h-5 w-5 text-blue-600" />
                           <div>
                             <div className="font-medium">
-                              {(page.content as any)?.title || 'Page sans titre'}
+                              {(page.content as PageContentData)?.title || 'Page sans titre'}
                             </div>
                             <div className="text-sm text-gray-600">
-                              /{(page.content as any)?.slug}
+                              /{(page.content as PageContentData)?.slug}
                             </div>
                           </div>
                         </div>
