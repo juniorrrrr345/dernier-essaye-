@@ -27,7 +27,8 @@ export default function ProduitsPage() {
       const response = await fetch('/api/products');
       if (response.ok) {
         const data = await response.json();
-        setProducts(data.products);
+        // L'API retourne directement le tableau de produits
+        setProducts(Array.isArray(data) ? data : []);
       }
     } catch (error) {
       console.error('Erreur récupération produits:', error);

@@ -7,6 +7,7 @@ import { formatPrice } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +15,8 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -22,13 +25,20 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     >
       <Card className="h-full">
         <div className="relative aspect-video overflow-hidden">
-          <Image
-            src={product.thumbnail_url}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-300 hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          {!imageError && product.thumbnail_url ? (
+            <Image
+              src={product.thumbnail_url}
+              alt={product.name}
+              fill
+              className="object-cover transition-transform duration-300 hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+              <div className="text-gray-400 text-sm">Image non disponible</div>
+            </div>
+          )}
           <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
             <motion.div
               className="opacity-0 hover:opacity-100 transition-opacity duration-300"

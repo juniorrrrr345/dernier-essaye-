@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ShopConfigProvider } from '@/components/providers/ShopConfigProvider';
+import DebugPanel from '@/components/DebugPanel';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <DebugPanel isVisible={true} />
           </div>
         </ShopConfigProvider>
       </body>

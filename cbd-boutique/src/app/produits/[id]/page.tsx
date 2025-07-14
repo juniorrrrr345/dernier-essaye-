@@ -28,7 +28,8 @@ export default function ProductDetailPage() {
       const response = await fetch(`/api/products/${id}`);
       if (response.ok) {
         const data = await response.json();
-        setProduct(data.product);
+        // L'API retourne directement le produit
+        setProduct(data);
       } else {
         router.push('/produits');
       }
