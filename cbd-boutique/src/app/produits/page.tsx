@@ -5,29 +5,53 @@ import { Product } from '@/types';
 import ProductCard from '@/components/ProductCard';
 import { Input } from '@/components/ui/Input';
 import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search, Tag, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+}
 
 export default function ProduitsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
+
+  useEffect(() => {
+    // Vérifier si une catégorie est spécifiée dans l'URL
+    const categoryFromUrl = searchParams.get('category');
+    if (categoryFromUrl) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     filterProducts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, searchQuery]);
+  }, [products, searchQuery, selectedCategory]);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products');
+      let url = '/api/products';
+      if (selectedCategory) {
+        url = `/api/products/category/${selectedCategory}`;
+      }
+      
+      const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        // L'API retourne directement le tableau de produits
         setProducts(Array.isArray(data) ? data : []);
       }
     } catch (error) {
@@ -37,18 +61,58 @@ export default function ProduitsPage() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/admin/content');
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data.categories || []);
+      }
+    } catch (error) {
+      console.error('Erreur récupération catégories:', error);
+    }
+  };
+
   const filterProducts = () => {
-    if (!searchQuery.trim()) {
-      setFilteredProducts(products);
-      return;
+    let filtered = products;
+
+    // Filtrer par recherche
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query)
+      );
     }
 
-    const query = searchQuery.toLowerCase();
-    const filtered = products.filter(product =>
-      product.name.toLowerCase().includes(query) ||
-      product.description.toLowerCase().includes(query)
-    );
     setFilteredProducts(filtered);
+  };
+
+  const handleCategoryChange = (categorySlug: string) => {
+    setSelectedCategory(categorySlug);
+    setSearchQuery('');
+    setLoading(true);
+    
+    // Mettre à jour l'URL sans recharger la page
+    const url = new URL(window.location.href);
+    if (categorySlug) {
+      url.searchParams.set('category', categorySlug);
+    } else {
+      url.searchParams.delete('category');
+    }
+    window.history.pushState({}, '', url.toString());
+    
+    // Recharger les produits
+    fetchProducts();
+  };
+
+  const clearFilters = () => {
+    setSelectedCategory('');
+    setSearchQuery('');
+    const url = new URL(window.location.href);
+    url.searchParams.delete('category');
+    window.history.pushState({}, '', url.toString());
+    fetchProducts();
   };
 
   return (
@@ -87,6 +151,85 @@ export default function ProduitsPage() {
           </motion.div>
         </motion.div>
 
+        {/* Categories Filter */}
+        {categories.length > 0 && (
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="flex flex-wrap gap-2 justify-center">
+              <button
+                onClick={() => handleCategoryChange('')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  !selectedCategory
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Toutes les catégories
+              </button>
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => handleCategoryChange(category.slug)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
+                    selectedCategory === category.slug
+                      ? 'bg-green-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Tag className="h-4 w-4" />
+                  <span>{category.name}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Active Filters */}
+        {(selectedCategory || searchQuery) && (
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="text-sm text-gray-600">Filtres actifs :</span>
+              {selectedCategory && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                  Catégorie: {categories.find(c => c.slug === selectedCategory)?.name}
+                  <button
+                    onClick={() => handleCategoryChange('')}
+                    className="ml-2 hover:text-green-600"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              )}
+              {searchQuery && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                  Recherche: "{searchQuery}"
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="ml-2 hover:text-blue-600"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              )}
+              <button
+                onClick={clearFilters}
+                className="text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Effacer tous les filtres
+              </button>
+            </div>
+          </motion.div>
+        )}
+
         {/* Products Count */}
         {!loading && (
           <motion.div
@@ -102,7 +245,7 @@ export default function ProduitsPage() {
                                      pour &ldquo;{searchQuery}&rdquo;
                 </>
               ) : (
-                `${products.length} produit${products.length > 1 ? 's' : ''} disponible${products.length > 1 ? 's' : ''}`
+                `${filteredProducts.length} produit${filteredProducts.length > 1 ? 's' : ''} disponible${filteredProducts.length > 1 ? 's' : ''}`
               )}
             </p>
           </motion.div>

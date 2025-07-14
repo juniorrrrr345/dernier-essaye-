@@ -1,13 +1,37 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { useShopConfig } from '@/components/providers/ShopConfigProvider';
+
+interface SiteTexts {
+  footer_text: string;
+}
 
 export function Footer() {
   const { config } = useShopConfig();
+  const [siteTexts, setSiteTexts] = useState<SiteTexts>({
+    footer_text: ''
+  });
   
-  const footerText = config?.footer_text || '© 2024 Ma Boutique CBD. Tous droits réservés.';
+  const footerText = siteTexts.footer_text || config?.footer_text || '© 2024 Ma Boutique CBD. Tous droits réservés.';
   const isDarkMode = config?.dark_mode || false;
+
+  useEffect(() => {
+    const fetchSiteTexts = async () => {
+      try {
+        const response = await fetch('/api/admin/content');
+        if (response.ok) {
+          const data = await response.json();
+          setSiteTexts(data.site_texts || {});
+        }
+      } catch (error) {
+        console.error('Erreur récupération textes footer:', error);
+      }
+    };
+
+    fetchSiteTexts();
+  }, []);
 
   return (
     <footer className={`${

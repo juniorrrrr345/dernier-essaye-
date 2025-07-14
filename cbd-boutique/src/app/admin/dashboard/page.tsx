@@ -5,7 +5,7 @@ import { Product } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Plus, Edit, Trash2, Settings, Users, Package, Eye, ExternalLink, Share2, Palette } from 'lucide-react';
+import { Plus, Edit, Trash2, Settings, Users, Package, Eye, ExternalLink, Share2, Palette, Tag } from 'lucide-react';
 import Link from 'next/link';
 
 // Modal pour l'édition des produits
@@ -371,12 +371,22 @@ export default function AdminDashboard() {
               </Card>
             </Link>
 
-            <Link href="/admin/config/content">
+            <Link href="/admin/config/texts">
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardContent className="p-4 sm:p-6 text-center">
                   <Edit className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <h3 className="font-medium text-sm sm:text-base">Contenu</h3>
-                  <p className="text-xs sm:text-sm text-gray-600">Textes, pages</p>
+                  <h3 className="font-medium text-sm sm:text-base">Textes</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Textes de la boutique</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/admin/config/categories">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4 sm:p-6 text-center">
+                  <Tag className="h-8 w-8 text-orange-600 mx-auto mb-2" />
+                  <h3 className="font-medium text-sm sm:text-base">Catégories</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Gérer les catégories</p>
                 </CardContent>
               </Card>
             </Link>
