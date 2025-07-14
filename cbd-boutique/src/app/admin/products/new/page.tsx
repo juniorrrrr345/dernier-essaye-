@@ -6,8 +6,9 @@ import { Product } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Save, ArrowLeft, Upload, Play, ExternalLink, Image } from 'lucide-react';
+import { Save, ArrowLeft, Upload, Play, ExternalLink, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProductFormPage() {
   const router = useRouter();
@@ -324,9 +325,11 @@ export default function ProductFormPage() {
                     </label>
                     {product.thumbnail_url && (
                       <div className="mb-4">
-                        <img
+                        <Image
                           src={product.thumbnail_url}
                           alt="Aperçu"
+                          width={400}
+                          height={192}
                           className="w-full h-48 object-cover rounded-md border"
                         />
                       </div>
@@ -342,7 +345,7 @@ export default function ProductFormPage() {
                       <label htmlFor="thumbnail-upload">
                         <Button variant="outline" asChild>
                           <span className="cursor-pointer">
-                            <Image className="h-4 w-4 mr-2" />
+                            <ImageIcon className="h-4 w-4 mr-2" />
                             Choisir une image
                           </span>
                         </Button>
@@ -421,14 +424,16 @@ export default function ProductFormPage() {
                     {/* Aperçu de la carte produit */}
                     <div className="border rounded-lg p-4 bg-white shadow-sm">
                       {product.thumbnail_url ? (
-                        <img
+                        <Image
                           src={product.thumbnail_url}
                           alt={product.name || 'Produit'}
+                          width={400}
+                          height={192}
                           className="w-full h-48 object-cover rounded-md mb-3"
                         />
                       ) : (
                         <div className="w-full h-48 bg-gray-200 rounded-md mb-3 flex items-center justify-center">
-                          <Image className="h-12 w-12 text-gray-400" />
+                          <ImageIcon className="h-12 w-12 text-gray-400" />
                         </div>
                       )}
                       

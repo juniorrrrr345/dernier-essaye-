@@ -5,8 +5,9 @@ import { ShopConfig } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Save, ArrowLeft, Upload, Palette, Type, Image } from 'lucide-react';
+import { Save, ArrowLeft, Upload, Palette, Type, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ShopConfigPage() {
   const [config, setConfig] = useState<Partial<ShopConfig>>({
@@ -197,7 +198,7 @@ export default function ShopConfigPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <Image className="h-5 w-5 mr-2" />
+                    <ImageIcon className="h-5 w-5 mr-2" />
                     Logo de la boutique
                   </CardTitle>
                 </CardHeader>
@@ -208,9 +209,11 @@ export default function ShopConfigPage() {
                     </label>
                     {(logoPreview || config.logo_url) && (
                       <div className="mb-4">
-                        <img
+                        <Image
                           src={logoPreview || config.logo_url}
                           alt="Logo"
+                          width={80}
+                          height={80}
                           className="h-20 w-auto object-contain border rounded-md p-2"
                         />
                       </div>
@@ -332,9 +335,11 @@ export default function ShopConfigPage() {
                     <div className="bg-white bg-opacity-95 p-4 border-b">
                       <div className="flex items-center justify-between">
                         {(logoPreview || config.logo_url) ? (
-                          <img
+                          <Image
                             src={logoPreview || config.logo_url}
                             alt="Logo"
+                            width={32}
+                            height={32}
                             className="h-8 w-auto"
                           />
                         ) : (

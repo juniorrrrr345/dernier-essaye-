@@ -353,13 +353,13 @@ export default function SocialConfigPage() {
                     <ol className="list-decimal list-inside space-y-1 text-gray-600">
                       <li>Cliquez sur "Ajouter un réseau social"</li>
                       <li>Sélectionnez la plateforme dans la liste</li>
-                      <li>Entrez l'URL complète de votre profil</li>
+                      <li>Entrez l&apos;URL complète de votre profil</li>
                       <li>Cliquez sur "Ajouter"</li>
                     </ol>
                   </div>
                   
                   <div>
-                    <h4 className="font-medium">Exemples d'URLs :</h4>
+                    <h4 className="font-medium">Exemples d&apos;URLs :</h4>
                     <ul className="list-disc list-inside space-y-1 text-gray-600">
                       <li><strong>Facebook :</strong> https://facebook.com/votrepage</li>
                       <li><strong>Instagram :</strong> https://instagram.com/votrecompte</li>

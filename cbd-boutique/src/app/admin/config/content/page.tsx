@@ -389,10 +389,10 @@ export default function ContentConfigPage() {
                           <FileText className="h-5 w-5 text-blue-600" />
                           <div>
                             <div className="font-medium">
-                              {(page.content as any)?.title || 'Page sans titre'}
+                              {(page.content as Record<string, unknown>)?.title as string || 'Page sans titre'}
                             </div>
                             <div className="text-sm text-gray-600">
-                              /{(page.content as any)?.slug}
+                              /{(page.content as Record<string, unknown>)?.slug as string}
                             </div>
                           </div>
                         </div>

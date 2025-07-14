@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Settings, Users, Package, Eye, ExternalLink, Palette, Share2 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Modal pour l'édition des produits
 const ProductEditModal = ({ product, isOpen, onClose, onSave }: {
@@ -93,7 +94,7 @@ const ProductEditModal = ({ product, isOpen, onClose, onSave }: {
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">URL de l'image miniature</label>
+              <label className="block text-sm font-medium mb-1">URL de l&apos;image miniature</label>
               <input
                 type="url"
                 value={formData.thumbnail_url || ''}
@@ -463,9 +464,11 @@ export default function AdminDashboard() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <img 
+                      <Image 
                         src={product.thumbnail_url} 
                         alt={product.name}
+                        width={400}
+                        height={128}
                         className="w-full h-32 object-cover rounded-md mb-3"
                       />
                       <p className="text-sm text-gray-600 mb-2">
