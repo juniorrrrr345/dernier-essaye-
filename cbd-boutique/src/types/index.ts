@@ -16,6 +16,7 @@ export interface ShopConfig {
   shop_name: string;
   background_color: string;
   background_image_url?: string;
+  logo_url?: string;
   dark_mode: boolean;
   footer_text: string;
   created_at: string;
