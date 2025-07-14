@@ -67,7 +67,5 @@ export interface CloudinaryUploadResult {
   placeholder: boolean;
   url: string;
   secure_url: string;
-  folder: string;
   original_filename: string;
-  api_key: string;
 }
