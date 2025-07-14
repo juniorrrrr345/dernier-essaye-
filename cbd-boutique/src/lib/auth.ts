@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 // Configuration avec valeurs par défaut
 const JWT_SECRET = process.env.JWT_SECRET || 'default-jwt-secret-change-in-production';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2b$10$qz8xyCrA7UCnIYkp1TVZKe/Iz0amQoWrbx7S0cIFeBc1zQluBzOvq';
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2b$10$uh8OTKJhC9X5A7s5RoD7kuRJtQeb8Qbqimv4q65GK7CXge5NR2ucW';
 
 export interface AdminSession {
   authenticated: boolean;

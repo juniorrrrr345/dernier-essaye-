@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminPassword, generateAdminToken, verifyAdminToken } from '@/lib/auth';
+import { verifyAdminPassword, generateAdminToken, verifyAdminToken, createAdminSession } from '@/lib/auth';
 
 // POST /api/admin/auth - Login admin
 export async function POST(request: NextRequest) {
@@ -23,10 +23,12 @@ export async function POST(request: NextRequest) {
     }
 
     const token = generateAdminToken();
+    const session = createAdminSession();
 
     return NextResponse.json({
       success: true,
       token,
+      session,
       message: 'Connexion réussie'
     });
 
@@ -52,18 +54,20 @@ export async function GET(request: NextRequest) {
     }
 
     const token = authHeader.substring(7);
-    const session = verifyAdminToken(token);
+    const isValid = verifyAdminToken(token);
 
-    if (!session) {
+    if (!isValid) {
       return NextResponse.json(
         { authenticated: false, error: 'Token invalide' },
         { status: 401 }
       );
     }
 
+    const session = createAdminSession();
+
     return NextResponse.json({
       authenticated: true,
-      expires: session.expires
+      session
     });
 
   } catch (error) {
